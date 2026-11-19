@@ -1,4 +1,5 @@
-﻿using Bookstore.API.Models;
+﻿
+using Bookstore.API.Models;
 using Bookstore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,10 +34,17 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Order> CreateOrder([FromBody] Order order)
+    public ActionResult<Order> CreateOrder(
+        [FromBody] CreateOrderRequest request)
     {
         try
         {
+            var order = new Order
+            {
+                CustomerName = request.CustomerName,
+                Items = request.Items
+            };
+
             var createdOrder = _orderService.CreateOrder(order);
 
             return CreatedAtAction(

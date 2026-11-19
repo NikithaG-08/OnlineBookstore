@@ -43,6 +43,8 @@ paths:
           required: true
           schema:
             type: integer
+            enum: [1, 2, 3]
+          example: 1
       responses:
         '200':
           description: Book found
@@ -69,6 +71,7 @@ paths:
           required: true
           schema:
             type: string
+            example: Clean
       responses:
         '200':
           description: Search results
@@ -106,6 +109,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateOrderRequest'
+            examples:
+              validOrder:
+                summary: Create an order using an existing book
+                value:
+                  customerName: Nikitha
+                  items:
+                    - bookId: 1
+                      quantity: 1
+                      price: 450.00
       responses:
         '201':
           description: Order created successfully
@@ -132,6 +144,7 @@ paths:
           required: true
           schema:
             type: integer
+            example: 101
       responses:
         '200':
           description: Order found
@@ -202,7 +215,7 @@ components:
         totalAmount:
           type: number
           format: double
-          example: 900.00
+          example: 450.00
         status:
           type: string
           enum:
@@ -221,11 +234,13 @@ components:
       properties:
         bookId:
           type: integer
+          enum: [1, 2, 3]
           example: 1
         quantity:
           type: integer
           minimum: 1
-          example: 2
+          maximum: 10
+          example: 1
         price:
           type: number
           format: double

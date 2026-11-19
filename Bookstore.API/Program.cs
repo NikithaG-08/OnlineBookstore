@@ -4,8 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddSingleton<IBookService, BookService>();
+builder.Services.AddSingleton<IOrderService, OrderService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
