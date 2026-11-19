@@ -144,7 +144,8 @@ paths:
           required: true
           schema:
             type: integer
-            example: 101
+            enum: [1]
+          example: 1
       responses:
         '200':
           description: Order found
@@ -204,10 +205,10 @@ components:
       properties:
         id:
           type: integer
-          example: 101
+          example: 1
         customerName:
           type: string
-          example: Nikitha
+          example: Specmatic Test Customer
         items:
           type: array
           items:

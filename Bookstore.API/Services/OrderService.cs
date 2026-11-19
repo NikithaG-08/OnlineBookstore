@@ -12,6 +12,20 @@ public class OrderService : IOrderService
     public OrderService(IBookService bookService)
     {
         _bookService = bookService;
+
+        // Seed a default order for Specmatic contract testing
+        CreateOrder(new Order
+        {
+            CustomerName = "Specmatic Test Customer",
+            Items = new List<OrderItem>
+            {
+                new OrderItem
+                {
+                    BookId = 1,
+                    Quantity = 1
+                }
+            }
+        });
     }
 
     public List<Order> GetAllOrders()
@@ -58,4 +72,3 @@ public class OrderService : IOrderService
         return order;
     }
 }
-    
