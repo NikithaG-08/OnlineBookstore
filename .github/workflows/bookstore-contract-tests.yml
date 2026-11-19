@@ -1,0 +1,65 @@
+
+name: Bookstore API Contract Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '11.0.x'
+
+      - name: Restore API
+        run: dotnet restore Bookstore.API/Bookstore.API.csproj
+
+      - name: Build API
+        run: dotnet build Bookstore.API/Bookstore.API.csproj --configuration Release --no-restore
+
+      - name: Start Bookstore API
+        run: |
+          nohup dotnet run \
+            --project Bookstore.API/Bookstore.API.csproj \
+            --configuration Release \
+            --no-build \
+            --urls http://0.0.0.0:8081 \
+            > api.log 2>&1 &
+
+      - name: Wait for API
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8081/api/books; then
+              echo "Bookstore API is ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Bookstore API failed to start"
+          cat api.log
+          exit 1
+
+      - name: Run Specmatic Contract Tests
+        run: |
+          docker run --rm \
+            --add-host=host.docker.internal:host-gateway \
+            -v "${{ github.workspace }}/Bookstore.Specmatic.Tests/Contracts/bookstore-api.yaml:/bookstore-api.yaml" \
+            specmatic/specmatic \
+            test /bookstore-api.yaml \
+            --testBaseURL=http://host.docker.internal:8081
+
+      - name: Show API logs if pipeline fails
+        if: failure()
+        run: cat api.log

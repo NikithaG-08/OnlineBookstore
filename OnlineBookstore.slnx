@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/workflows/">
+    <File Path="bookstore-contract-tests.yml" />
+  </Folder>
+  <Project Path="Bookstore.API/Bookstore.API.csproj" />
+  <Project Path="Bookstore.Specmatic.Tests/Bookstore.Specmatic.Tests.csproj" />
+</Solution>
